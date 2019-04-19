@@ -1,0 +1,14 @@
+name: HubCommand
+main: com.lego.bungeecord.Main
+version: 1.2.1
+author: lovelego123
+commands:
+  factions:
+      description: Go to factions
+      usage: /factions
+  skyblock:
+      description: Go to skyblock.
+      usage: /skyblock
+  hub:
+      description: Go to the hub.
+      usage: /hub

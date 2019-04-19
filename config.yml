@@ -1,0 +1,10 @@
+hub: 'default' # 'default' is the bungeecord home server, if you would like to change it to 'hub', go ahead.
+factions: 'factions' # Please, set this to the factions server.
+skyblock: 'skyblock' # Please, set this to the skyblock server.
+alreadyInServer: You are already connected to this server!
+disabledServersError: You can't do /hub here
+
+disabled-servers: []
+
+# Do not touch pls. Internal Use
+config-version: 2
