@@ -1,0 +1,100 @@
+package com.lego.bungeecord;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
+
+public class ConfigManager {
+    private static final int version = 2;
+
+    public ConfigManager() {
+    }
+
+    public static void updateVersion() {
+        Configuration c = null;
+
+        try {
+            c = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(Main.getInstance().getDataFolder(), "config.yml"));
+        } catch (IOException var20) {
+            var20.printStackTrace();
+        }
+
+        int v = 1;
+        if (c.contains("config-version")) {
+            v = c.getInt("config-version");
+        }
+
+        if (v < 2) {
+            Map<String, Object> m = new HashMap();
+            Iterator var4 = c.getKeys().iterator();
+
+            String s;
+            while(var4.hasNext()) {
+                s = (String)var4.next();
+                if (!s.equals("config-version")) {
+                    m.put(s, c.get(s));
+                }
+            }
+
+            (new File(Main.getInstance().getDataFolder(), "config.yml")).delete();
+
+            try {
+                Throwable var24 = null;
+                var4 = null;
+
+                try {
+                    InputStream in = Main.getInstance().getResourceAsStream("config.yml");
+
+                    try {
+                        Files.copy(in, (new File(Main.getInstance().getDataFolder(), "config.yml")).toPath(), new CopyOption[0]);
+                    } finally {
+                        if (in != null) {
+                            in.close();
+                        }
+
+                    }
+                } catch (Throwable var22) {
+                    if (var24 == null) {
+                        var24 = var22;
+                    } else if (var24 != var22) {
+                        var24.addSuppressed(var22);
+                    }
+
+                    throw var24;
+                }
+            } catch (IOException var23) {
+                var23.printStackTrace();
+            }
+
+            try {
+                c = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(Main.getInstance().getDataFolder(), "config.yml"));
+            } catch (IOException var19) {
+                var19.printStackTrace();
+            }
+
+            var4 = c.getKeys().iterator();
+
+            while(var4.hasNext()) {
+                s = (String)var4.next();
+                if (m.containsKey(s)) {
+                    c.set(s, m.get(s));
+                }
+            }
+
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(c, new File(Main.getInstance().getDataFolder(), "config.yml"));
+            } catch (IOException var18) {
+                var18.printStackTrace();
+            }
+
+        }
+    }
+}
